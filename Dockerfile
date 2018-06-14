@@ -16,16 +16,17 @@ RUN apt-get install -y nodejs
 RUN npm install -g grunt-cli
 
 # Install the pR0Ps/grafana-trackmap-panel plugin
-WORKDIR /var/lib/grafana/plugins
+WORKDIR /var/lib/grafana-plugins
 RUN git clone https://github.com/pR0Ps/grafana-trackmap-panel.git grafana-trackmap-panel
-WORKDIR /var/lib/grafana/plugins/grafana-trackmap-panel
+WORKDIR /var/lib/grafana-plugins/grafana-trackmap-panel
 RUN npm install findup-sync
 RUN npm install grunt-cli
 RUN npm install
 RUN npm run build
 
+# Separate plugins area out from dashboard storage
+RUN chown -R 472 /var/lib/grafana-plugins
+ENV GF_PATHS_PLUGINS /var/lib/grafana-plugins
+
 USER grafana
 WORKDIR /
-
-# TEMP FOR TESTING
-# USER root
