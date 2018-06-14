@@ -1,4 +1,4 @@
-# docker-livehouse-grafana
+# livehouseautomation/veraflux-grafana
 Livehouse Automation version of Grafana Docker Image.
 
 This image is designed to be the main visualisation tool for the VeraFlux environment, working alongside:
