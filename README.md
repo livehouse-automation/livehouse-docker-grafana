@@ -40,6 +40,8 @@ docker run \
  livehouseautomation/veraflux-grafana
 ```
 
+You can then hit the web interface at ```http://<host>:3000/```
+
 
 ## Volumes
 
