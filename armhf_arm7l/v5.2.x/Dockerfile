@@ -94,8 +94,9 @@ EXPOSE 3000
 
 COPY --from=grafana/grafana:latest ./run.sh /run.sh
 
-USER grafana
 WORKDIR /
 RUN rm -rf /grafana_install
+
+USER grafana
 
 ENTRYPOINT [ "/run.sh" ]
