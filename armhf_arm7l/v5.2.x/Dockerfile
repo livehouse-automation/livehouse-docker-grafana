@@ -86,7 +86,7 @@ RUN mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
              "$GF_PATHS_PLUGINS" \
              "$GF_PATHS_DATA"
 RUN cp -v ${GF_PATHS_HOME}/conf/sample.ini ${GF_PATHS_CONFIG}
-RUN cp -v ${GF_PATHS_HOME}/conf/ldap.toml" /etc/grafana/ldap.toml
+RUN cp -v ${GF_PATHS_HOME}/conf/ldap.toml /etc/grafana/ldap.toml
 RUN mv -v ${GF_PATHS_DATA}/plugins ${GF_PATHS_PLUGINS}
 RUN chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS"
 RUN chmod 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS"
