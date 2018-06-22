@@ -75,7 +75,7 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws"
 
 WORKDIR /grafana_install
 COPY --from=grafana_builder /usr/local/src/grafana/src/github.com/grafana/grafana/dist/*.tar.gz .
-RUN tar xfvz *.tar.gz --strip-components=1 -C "$GF_PATHS_HOME"
+RUN tar xfvz *.tar.gz --strip-components=2 -C "$GF_PATHS_HOME"
 
 RUN apt-get autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
