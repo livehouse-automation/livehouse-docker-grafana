@@ -41,7 +41,6 @@ RUN go run build.go build
 # Build frontend
 RUN npm install -g yarn
 ENV DEBIAN_FRONTEND noninteractive
-#RUN apt-get install -y --no-install-recommends lubuntu-desktop
 RUN apt-get install -y --no-install-recommends ruby ruby-dev
 RUN gem install fpm
 ENV QT_QPA_PLATFORM offscreen
@@ -67,7 +66,7 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_HOME="/usr/share/grafana" \
     GF_PATHS_LOGS="/var/log/grafana" \
     GF_PATHS_PLUGINS="/var/lib/grafana-plugins" \
-    GF_PATHS_PROVISIONING="/etc/grafana-provisioning"
+    GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 
 RUN apt-get update -y 
 RUN apt-get install -y tar libfontconfig curl ca-certificates
@@ -75,7 +74,7 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws"
 
 WORKDIR /grafana_install
 COPY --from=grafana_builder /usr/local/src/grafana/src/github.com/grafana/grafana/dist/*.tar.gz .
-RUN tar xfvz *.tar.gz --strip-components=2 -C "$GF_PATHS_HOME"
+RUN tar xfvz *.tar.gz --strip-components=1 -C "$GF_PATHS_HOME"
 
 RUN apt-get autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
@@ -86,8 +85,9 @@ RUN mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
              "$GF_PATHS_LOGS" \
              "$GF_PATHS_PLUGINS" \
              "$GF_PATHS_DATA"
-RUN cp "$GF_PATHS_HOME/conf/sample.ini" "$GF_PATHS_CONFIG"
-RUN cp "$GF_PATHS_HOME/conf/ldap.toml" /etc/grafana/ldap.toml
+RUN cp -v ${GF_PATHS_HOME}/conf/sample.ini ${GF_PATHS_CONFIG}
+RUN cp -v ${GF_PATHS_HOME}/conf/ldap.toml" /etc/grafana/ldap.toml
+RUN mv -v ${GF_PATHS_DATA}/plugins ${GF_PATHS_PLUGINS}
 RUN chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS"
 RUN chmod 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS"
 
