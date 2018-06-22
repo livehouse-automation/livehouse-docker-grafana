@@ -1,7 +1,11 @@
 FROM ubuntu:xenial as grafana_builder
+
+### NOTE: This Dockerfile is under development and as-such has not yet been optimised.
+###       Suggest not using it until it has been merged into the master branch.
+
 RUN apt-get update -y
 
-### BUILDING GRAFANA (doing this in a container)
+### BUILDING GRAFANA
 ### as-per http://docs.grafana.org/project/building_from_source/
 
 # Install dependencies
