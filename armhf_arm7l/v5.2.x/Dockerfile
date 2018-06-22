@@ -41,9 +41,9 @@ RUN go run build.go build
 # Build frontend
 RUN npm install -g yarn
 ENV DEBIAN_FRONTEND noninteractive
+#RUN apt-get install -y --no-install-recommends lubuntu-desktop
 RUN apt-get install -y --no-install-recommends ruby ruby-dev
 RUN gem install fpm
-# ENV QT_QPA_PLATFORM offscreen <-- required to prevent xserver dependencies
 ENV QT_QPA_PLATFORM offscreen
 RUN yarn install --pure-lockfile
 
@@ -52,7 +52,11 @@ RUN go run build.go -includeBuildNumber=false pkg-deb
 
 #################
 
-FROM debian:stretch-slim
+FROM ubuntu:bionic
+
+# Note: Original grafana image uses FROM debian:stretch-slim.
+# We can't use that, as it used obsolete and binary incompatible armel.
+# Ubuntu has adopted newer & better (IMHO) armhf.
 
 ARG GF_UID="472"
 ARG GF_GID="472"
@@ -65,7 +69,7 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_PLUGINS="/var/lib/grafana-plugins" \
     GF_PATHS_PROVISIONING="/etc/grafana-provisioning"
 
-RUN apt-get update -y
+RUN apt-get update -y 
 RUN apt-get install -y tar libfontconfig curl ca-certificates
 RUN mkdir -p "$GF_PATHS_HOME/.aws"
 
