@@ -3,7 +3,7 @@ RUN apt-get update -y && apt-get install -y golang git-sh nodejs npm phantomjs b
 
 ENV GOPATH /usr/local/src/grafana
 WORKDIR ${GOPATH}/src/github.com/grafana/
-RUN git clone -v https://github.com/grafana/grafana.git
+RUN git clone -v -b v5.1.x https://github.com/grafana/grafana.git
 
 # Build backend
 WORKDIR ${GOPATH}/src/github.com/grafana/grafana
