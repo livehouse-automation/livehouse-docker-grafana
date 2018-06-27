@@ -8,6 +8,10 @@ This image is designed to be the main visualisation tool for the VeraFlux enviro
  
 Having said that, it will work just fine visualising whatever data you want. Go nuts. Life is too short for rules.
 
+## Multi Architecture Support
+Currently, this image should pull and run on the following architectures:
+ * ```arm64```: Linux x86-64
+ * ```arm32v7```, ```armv7l```: ARMv7 32-bit (Odroid HC1/HC2/XU4)
 
 ## Changes from the official image (grafana/grafana) ## 
  * Includes the excellent pR0Ps/grafana-trackmap-panel plugin (for showing VeraFlux 'urn:upnp-org:serviceId:IPhoneLocator1' location data)
