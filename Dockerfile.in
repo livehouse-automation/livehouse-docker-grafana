@@ -26,7 +26,8 @@ RUN git clone -v -b v5.1.x https://github.com/grafana/grafana.git
 
 # Build grafana backend
 WORKDIR ${GOPATH}/src/github.com/grafana/grafana
-RUN go run build.go setup && go run build.go build
+RUN go run build.go setup
+RUN go run build.go build
 
 # Build grafana frontend
 RUN npm install -g yarn
