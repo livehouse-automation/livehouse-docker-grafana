@@ -14,8 +14,14 @@ COPY ./qemu-arm-static /usr/bin/
 
 # Install the many build pre-requisites
 RUN apt-get update -y && \
-    apt-get install -y golang git-sh nodejs npm phantomjs build-essential ca-certificates ruby ruby-dev curl && \
+    apt-get install -y git-sh nodejs npm phantomjs build-essential ca-certificates ruby ruby-dev curl && \
     rm -rf /var/lib/apt/lists/* 
+
+# Install Go
+RUN curl -o /tmp/go.tar.gz %GOURL% && \
+    tar -C /usr/local -xzvf /tmp/go.tar.gz && \
+    rm /tmp/go.tar.gz
+ENV PATH $PATH:/usr/local/go/bin
 
 # Set up Go build environment for grafana
 ENV GOPATH /usr/local/src/grafana
