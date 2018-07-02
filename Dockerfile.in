@@ -10,7 +10,7 @@
 
 FROM %BASEIMAGE% as grafana_builder
 ARG ARCH=%TARGET%
-COPY /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
+ADD /usr/bin/qemu-arm-static /usr/bin/
 
 # Install the many build pre-requisites
 RUN apt-get update -y && \
@@ -55,7 +55,7 @@ RUN npm install findup-sync && \
 
 FROM %BASEIMAGE%
 ARG ARCH=%TARGET%
-COPY /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
+ADD /usr/bin/qemu-arm-static /usr/bin/
 
 # Define volumes (data, config, plugins)
 VOLUME ["/var/lib/grafana", "/etc/grafana", "/var/lib/grafana-plugins"]
