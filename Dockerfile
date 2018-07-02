@@ -101,5 +101,19 @@ RUN chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_L
 
 # Copy entrypoint from grafana/grafana image, set user and set entrypoint
 COPY --from=grafana/grafana:latest /run.sh /run.sh
+
+# Set grafana user
 USER grafana
+
+# Install official plugins
+RUN grafana-cli plugins install snuids-trafficlights-panel && \
+    grafana-cli plugins install vonage-status-panel && \
+    grafana-cli plugins install blackmirror1-singlestat-math-panel && \
+    grafana-cli plugins install snuids-radar-panel && \
+    grafana-cli plugins install bessler-pictureit-panel && \
+    grafana-cli plugins install briangann-gauge-panel && \
+    grafana-cli plugins install grafana-piechart-panel && \
+    grafana-cli plugins install grafana-clock-panel
+
+# Set entrypoint
 ENTRYPOINT ["/run.sh"]
