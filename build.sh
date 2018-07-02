@@ -3,10 +3,10 @@
 IMAGENAME="livehouseautomation/veraflux-grafana"
 TAG="development-v5.1.x"
 
-python ./generate_dockerfiles.py
+python ./helper_scripts/generate_dockerfiles.py
 
 # set up multiarch build env
-docker run --rm --privileged multiarch/qemu-user-static:register
+sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 # build arm32v7
 docker build -t $IMAGENAME:$TAG-arm32v7 ./arm32v7/
