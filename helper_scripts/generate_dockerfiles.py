@@ -8,7 +8,7 @@ arch_images = {'amd64':   {'image':  'amd64/ubuntu:bionic',
                            'gourl':  'https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz',},
                'arm32v7': {'image':  'arm32v7/ubuntu:bionic', 
                            'target': 'armhf', 
-                           'goarch': 'arm'
+                           'goarch': 'arm',
                            'gourl':  'https://dl.google.com/go/go1.10.3.linux-armv6l.tar.gz'},
               }
 
