@@ -8,7 +8,8 @@
 # First build stage
 #####
 
-FROM ubuntu:bionic as grafana_builder
+FROM %BASEIMAGE% as grafana_builder
+ARG ARCH=%TARGET%
 
 # Install the many build pre-requisites
 RUN apt-get update -y && \
@@ -51,7 +52,8 @@ RUN npm install findup-sync && \
 # Second build stage
 #####
 
-FROM ubuntu:bionic
+FROM %BASEIMAGE%
+ARG ARCH=%TARGET%
 
 # Define volumes (data, config, plugins)
 VOLUME ["/var/lib/grafana", "/etc/grafana", "/var/lib/grafana-plugins"]
