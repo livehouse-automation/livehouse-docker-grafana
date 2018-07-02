@@ -3,6 +3,10 @@
 IMAGENAME="livehouseautomation/veraflux-grafana"
 TAG="development-v5.1.x"
 
+echo "CLEANING PRIOR TO BUILD"
+rm -v ./arm32v7/*
+rm -v ./amd64/*
+
 echo "GENERATING DOCKERFILES FROM Dockerfile.in"
 python ./helper_scripts/generate_dockerfiles.py
 
@@ -12,14 +16,12 @@ sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 # build arm32v7
 echo "BUILDING arm32v7"
-rm -v ./arm32v7/*
 cp -v /usr/bin/qemu-arm-static ./arm32v7/
 docker build -t $IMAGENAME:$TAG-arm32v7 ./arm32v7/
 rm -v ./arm32v7/qemu-arm-static
 
 # build amd64
 echo "BUILDING amd64"
-rm -v ./amd64/*
 cp -v /usr/bin/qemu-arm-static ./amd64/
 docker build -t $IMAGENAME:$TAG-amd64 ./amd64/
 rm -v ./amd64/qemu-arm-static
