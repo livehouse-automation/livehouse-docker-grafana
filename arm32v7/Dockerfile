@@ -13,8 +13,14 @@ ARG ARCH=armhf
 
 # Install the many build pre-requisites
 RUN apt-get update -y && \
-    apt-get install -y golang git-sh nodejs npm phantomjs build-essential ca-certificates ruby ruby-dev curl && \
+    apt-get install -y git-sh nodejs npm phantomjs build-essential ca-certificates ruby ruby-dev curl && \
     rm -rf /var/lib/apt/lists/* 
+
+# Install Go
+RUN curl -o /tmp/go.tar.gz https://dl.google.com/go/go1.10.3.linux-armv6l.tar.gz && \
+    tar -C /usr/local -xzvf /tmp/go.tar.gz && \
+    rm /tmp/go.tar.gz
+ENV PATH $PATH:/usr/local/go/bin
 
 # Set up Go build environment for grafana
 ENV GOPATH /usr/local/src/grafana
@@ -25,7 +31,8 @@ RUN git clone -v -b v5.1.x https://github.com/grafana/grafana.git
 
 # Build grafana backend
 WORKDIR ${GOPATH}/src/github.com/grafana/grafana
-RUN go run build.go setup && go run build.go build
+RUN go run build.go setup
+RUN go run build.go build
 
 # Build grafana frontend
 RUN npm install -g yarn
@@ -108,14 +115,14 @@ COPY --from=grafana/grafana:latest /run.sh /run.sh
 USER grafana
 
 # Install official plugins
-RUN grafana-cli plugins install snuids-trafficlights-panel && \
-    grafana-cli plugins install vonage-status-panel && \
-    grafana-cli plugins install blackmirror1-singlestat-math-panel && \
-    grafana-cli plugins install snuids-radar-panel && \
-    grafana-cli plugins install bessler-pictureit-panel && \
-    grafana-cli plugins install briangann-gauge-panel && \
-    grafana-cli plugins install grafana-piechart-panel && \
-    grafana-cli plugins install grafana-clock-panel
+RUN grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install snuids-trafficlights-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install vonage-status-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install blackmirror1-singlestat-math-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install snuids-radar-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install bessler-pictureit-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install briangann-gauge-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-piechart-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-clock-panel && \
 
 # Set entrypoint
 ENTRYPOINT ["/run.sh"]

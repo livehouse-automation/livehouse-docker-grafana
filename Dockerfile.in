@@ -10,7 +10,6 @@
 
 FROM %BASEIMAGE% as grafana_builder
 ARG ARCH=%TARGET%
-COPY ./qemu-arm-static /usr/bin/
 
 # Install the many build pre-requisites
 RUN apt-get update -y && \
@@ -62,7 +61,6 @@ RUN npm install findup-sync && \
 
 FROM %BASEIMAGE%
 ARG ARCH=%TARGET%
-COPY ./qemu-arm-static /usr/bin/
 
 # Define volumes (data, config, plugins)
 VOLUME ["/var/lib/grafana", "/etc/grafana", "/var/lib/grafana-plugins"]
@@ -116,7 +114,7 @@ COPY --from=grafana/grafana:latest /run.sh /run.sh
 # Set grafana user
 USER grafana
 
-# Install official plugins & clean up qemu static
+# Install official plugins
 RUN grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install snuids-trafficlights-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install vonage-status-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install blackmirror1-singlestat-math-panel && \
@@ -125,7 +123,6 @@ RUN grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install snuids-tra
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install briangann-gauge-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-piechart-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-clock-panel && \
-    rm -v /usr/bin/qemu-arm-static
 
 # Set entrypoint
 ENTRYPOINT ["/run.sh"]
