@@ -46,6 +46,7 @@ echo "BUILDING $ARCH"
 docker build -t $IMAGENAME:$TAG-$ARCH .
 docker push $IMAGENAME:$TAG-$ARCH
 		""" % (arch, tag)
+		buildscript_out.write(buildscript)
 
 
 print('Done!')
