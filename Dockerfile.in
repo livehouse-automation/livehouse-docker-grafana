@@ -122,7 +122,7 @@ RUN grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install snuids-tra
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install bessler-pictureit-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install briangann-gauge-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-piechart-panel && \
-    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-clock-panel && \
+    grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-clock-panel
 
 # Set entrypoint
 ENTRYPOINT ["/run.sh"]
