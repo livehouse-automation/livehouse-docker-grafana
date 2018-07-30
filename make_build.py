@@ -11,7 +11,7 @@ if __name__ == "__main__":
         type=str,
         nargs=1,
         help='docker image tag',
-        default=['latest']
+        required=True
         )
 
     args = parser.parse_args()
@@ -94,7 +94,7 @@ docker push $IMAGENAME:$TAG-$ARCH
     # make create manifest script
 
     output_manifest_tag = os.path.join(os.getcwd(), "create_manifest_tag.sh")
-    print("Making manifest script for this tag '%s'" % (output_manifest_tag))
+    print("Making manifest script for '%s' tag '%s'" % (args.tag[0], output_manifest_tag))
     with open(output_manifest_tag, 'w') as manifest_tag_out:
         manifest_tag_out.write("""#!/bin/bash
 
@@ -113,7 +113,7 @@ docker manifest push $IMAGENAME:$TAG
     # make create manifest script
 
     output_manifest_latest = os.path.join(os.getcwd(), "create_manifest_latest.sh")
-    print("Making manifest script '%s'" % (output_manifest_latest))
+    print("Making manifest script for 'latest' tag '%s'" % (output_manifest_latest))
     with open(output_manifest_latest, 'w') as manifest_latest_out:
         manifest_latest_out.write("""#!/bin/bash
 
