@@ -88,7 +88,7 @@ TAG="%s"
 echo "PUSHING TO DOCKER HUB"
 docker push $IMAGENAME:$TAG-$ARCH
 """ % (arch, args.tag[0])
-            pushscript_out.write(pushscrupt)
+            pushscript_out.write(pushscript)
 
 
     # make create manifest script
