@@ -93,10 +93,10 @@ docker push $IMAGENAME:$TAG-$ARCH
 
     # make create manifest script
 
-    output_manifest = os.path.join(os.getcwd(), "create_manifest.sh")
-    print("Making manifest script '%s'" % (output_manifest))
-    with open(output_manifest, 'w') as manifest_out:
-        manifest_out.write("""#!/bin/bash
+    output_manifest_tag = os.path.join(os.getcwd(), "create_manifest_tag.sh")
+    print("Making manifest script for this tag '%s'" % (output_manifest_tag))
+    with open(output_manifest_tag, 'w') as manifest_tag_out:
+        manifest_tag_out.write("""#!/bin/bash
 
 echo "CREATE MULTI-ARCH DOCKER MANIFEST"
 
@@ -107,6 +107,25 @@ docker manifest create $IMAGENAME:$TAG $IMAGENAME:$TAG-arm32v7 $IMAGENAME:$TAG-a
 docker manifest annotate $IMAGENAME:$TAG $IMAGENAME:$TAG-amd64 --os linux --arch amd64
 docker manifest annotate $IMAGENAME:$TAG $IMAGENAME:$TAG-arm32v7 --os linux --arch arm --variant v7
 docker manifest push $IMAGENAME:$TAG
+""" % (args.tag[0]))
+
+
+    # make create manifest script
+
+    output_manifest_latest = os.path.join(os.getcwd(), "create_manifest_latest.sh")
+    print("Making manifest script '%s'" % (output_manifest_latest))
+    with open(output_manifest_latest, 'w') as manifest_latest_out:
+        manifest_latest_out.write("""#!/bin/bash
+
+echo "CREATE MULTI-ARCH DOCKER MANIFEST"
+
+IMAGENAME="livehouseautomation/veraflux-grafana"
+TAG="%s"
+
+docker manifest create $IMAGENAME:latest $IMAGENAME:$TAG-arm32v7 $IMAGENAME:$TAG-amd64
+docker manifest annotate $IMAGENAME:latest $IMAGENAME:$TAG-amd64 --os linux --arch amd64
+docker manifest annotate $IMAGENAME:latest $IMAGENAME:$TAG-arm32v7 --os linux --arch arm --variant v7
+docker manifest push $IMAGENAME:latest
 """ % (args.tag[0]))
 
     print('Done!')
