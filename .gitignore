@@ -5,4 +5,5 @@ amd64/Dockerfile
 arm32v7/build.sh
 arm32v7/push.sh
 arm32v7/Dockerfile
-create_manifest.sh
+create_manifest_latest.sh
+create_manifest_tag.sh
