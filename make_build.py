@@ -11,7 +11,7 @@ if __name__ == "__main__":
         type=str,
         nargs=1,
         help='docker image tag',
-        default='latest'
+        default=['latest']
         )
 
     args = parser.parse_args()
@@ -42,6 +42,9 @@ if __name__ == "__main__":
         output_pushscript = os.path.join(output_dir,"push.sh")
         gourl = arch_images[arch]['gourl']
 
+
+        # make dockerfile
+
         print("Making Dockerfile '%s' for %s using base image of %s for a target of %s" % 
             (output_dockerfile, arch, baseimage, target))
 
@@ -52,6 +55,9 @@ if __name__ == "__main__":
             read_data = read_data.replace("%GOURL%", gourl)
             with open(output_dockerfile, 'w') as dockerfile_out:
                 dockerfile_out.write(read_data)
+
+
+        # make build script
 
         print("Making build script '%s' for %s" % 
             (output_buildscript, arch))
@@ -67,6 +73,11 @@ docker build -t $IMAGENAME:$TAG-$ARCH .
 """ % (arch, args.tag[0])
             buildscript_out.write(buildscript)
 
+        
+        # make push script
+
+        print("Making push script '%s' for %s" % 
+            (output_pushscript, arch))
         with open(output_pushscript, 'w') as pushscript_out:
             pushscript = """#!/bin/bash
 
@@ -77,9 +88,11 @@ TAG="%s"
 echo "PUSHING TO DOCKER HUB"
 docker push $IMAGENAME:$TAG-$ARCH
 """ % (arch, args.tag[0])
-            pushscript_out.write(buildscript)
+            pushscript_out.write(pushscrupt)
 
-    # create manifest file
+
+    # make create manifest script
+
     output_manifest = os.path.join(os.getcwd(), "create_manifest.sh")
     print("Making manifest script '%s'" % (output_manifest))
     with open(output_manifest, 'w') as manifest_out:
