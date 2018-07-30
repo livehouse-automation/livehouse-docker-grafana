@@ -68,7 +68,7 @@ docker build -t $IMAGENAME:$TAG-$ARCH .
             buildscript_out.write(buildscript)
 
         print("Making push script '%s' for %s" % 
-            (output_buildscript, arch))
+            (output_pushscript, arch))
         with open(output_pushscript, 'w') as pushscript_out:
             pushscript = """#!/bin/bash
 
