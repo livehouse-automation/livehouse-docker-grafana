@@ -62,12 +62,6 @@ RUN npm install findup-sync && \
 FROM amd64/ubuntu:bionic
 ARG ARCH=amd64
 
-# Define volumes (data, config, plugins)
-VOLUME ["/var/lib/grafana", "/etc/grafana", "/var/lib/grafana-plugins"]
-
-# Expose grafana port
-EXPOSE 3000/tcp
-
 # Set up UID/GID for grafana
 ARG GF_UID="472"
 ARG GF_GID="472"
@@ -103,11 +97,6 @@ RUN mkdir -p "$GF_PATHS_HOME/.aws" && \
 # Copy pre-built pR0Ps/grafana-trackmap-panel from previous build stage
 COPY --from=grafana_builder /var/lib/grafana-plugins/grafana-trackmap-panel ${GF_PATHS_PLUGINS}/grafana-trackmap-panel
 
-# Fix permissions, remove temp install directory
-RUN chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" && \
-    chmod 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" && \
-    rm -rf /grafana_install
-
 # Copy entrypoint from grafana/grafana image, set user and set entrypoint
 COPY --from=grafana/grafana:latest /run.sh /run.sh
 
@@ -120,6 +109,22 @@ RUN grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install snuids-tra
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install briangann-gauge-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-piechart-panel && \
     grafana-cli --pluginsDir /var/lib/grafana-plugins plugins install grafana-clock-panel
+
+# Fix permissions, remove temp install directory
+WORKDIR /
+RUN chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" && \
+    chmod 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" && \
+    rm -rf /grafana_install
+
+# Define volumes (data, config, plugins)
+VOLUME ["/var/lib/grafana", "/etc/grafana", "/var/lib/grafana-plugins"]
+
+# Expose grafana port
+EXPOSE 3000/tcp
+
+# Set up healthcheck
+HEALTHCHECK --interval=1m --timeout=5s \
+  CMD curl -LSs http://localhost:3000 || exit 1
 
 # Set grafana user
 USER grafana

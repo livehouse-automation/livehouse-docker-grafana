@@ -1,0 +1,4 @@
+.DS_Store
+/amd64
+/arm32v7
+/create_manifest.sh
